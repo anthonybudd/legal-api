@@ -23,6 +23,8 @@ npm run exec:db:refresh
 
 ### Getting Started
 
+> NOTE: There is live demo of this codebase deployed to AWS just change the url to `https://legal-api.anthonybudd.io`
+
 First, get an access token
 ```sh
 response=$(curl -X POST http://localhost:8888/api/v1/auth/login \
