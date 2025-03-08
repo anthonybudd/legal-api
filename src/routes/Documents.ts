@@ -18,7 +18,6 @@ app.post('/upload', [
     passport.authenticate('jwt', { session: false }),
     body('groupID').optional().isString(),
     body('name').optional().isString(),
-    middleware.isPDF('file'),
 ], async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) return res.status(422).json({ errors: errors.mapped() });
