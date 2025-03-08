@@ -12,6 +12,7 @@ import { app as Auth } from './routes/Auth';
 import { app as User } from './routes/User';
 import { app as Groups } from './routes/Groups';
 import { app as Documents } from './routes/Documents';
+import { app as Extractions } from './routes/Extractions';
 
 
 const isTest = (process.env.NODE_ENV === 'test');
@@ -52,6 +53,7 @@ app.use('/api/v1/', Auth);
 app.use('/api/v1/', User);
 app.use('/api/v1/', Groups);
 app.use('/api/v1/', Documents);
+app.use('/api/v1/', Extractions);
 app.use(ErrorHandler);
 
 export default app;
