@@ -35,6 +35,7 @@
   "dependencies": {
     "@types/express-fileupload": "^1.5.0",
     "@types/mustache": "^4.2.5",
+    "aws-sdk": "^2.1692.0",
     "axios": "^1.7.2",
     "bcrypt-nodejs": "^0.0.3",
     "chai-http": "^5.0.0",

@@ -7,9 +7,29 @@ module.exports = {
             allowNull: false,
             unique: true
         },
+        groupID: {
+            type: Sequelize.UUID,
+            allowNull: false,
+            references: {
+                model: 'Groups',
+                key: 'id'
+            }
+        },
 
 
         name: {
+            type: Sequelize.STRING,
+            allowNull: false,
+        },
+        filePath: {
+            type: Sequelize.STRING,
+            allowNull: false,
+        },
+        size: {
+            type: Sequelize.INTEGER,
+            allowNull: false,
+        },
+        mimeType: {
             type: Sequelize.STRING,
             allowNull: false,
         },

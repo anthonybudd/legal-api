@@ -1,5 +1,6 @@
 import { ExtractJwt as ExtractJWT, Strategy as JWTStrategy } from 'passport-jwt';
 import { Strategy as LocalStrategy } from 'passport-local';
+import Group from './../models/Group';
 import { User } from './../models/User';
 import bcrypt from 'bcrypt-nodejs';
 import passport from 'passport';
@@ -13,6 +14,7 @@ passport.use(new LocalStrategy({
 
     const user = await User.unscoped().findOne({
         where: { email },
+        include: [Group]
     });
 
     if (!user) return cb(null, false);

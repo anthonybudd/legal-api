@@ -5,6 +5,8 @@ import isNotSelf from './isNotSelf';
 import hCaptcha from './hCaptcha';
 import hasRole from './hasRole';
 import isStrongPassword from './isStrongPassword';
+import isPDF from './isPDF';
+import canAccessDocument from './canAccessDocument';
 
 export default {
     isInGroup,
@@ -14,4 +16,6 @@ export default {
     hCaptcha,
     hasRole,
     isStrongPassword,
+    isPDF,
+    canAccessDocument,
 };

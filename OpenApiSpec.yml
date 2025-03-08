@@ -3,18 +3,23 @@ servers:
   - url: 'https://localhost:8888/api/v1/'
 info:
   description: >-
-    This is the public JSON REST API for the Express API Template.
+    This is the public JSON REST API for the Legal API.
   version: 1.0.0
-  title: Express API Template 
+  title: Legal API 
   license:
     name: Apache-2.0
     url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
 
 externalDocs:
-  description: Find out more about Express API Template
+  description: Find out more about Legal API
   url: 'https://github.com/anthonybudd/legal-api-template'
 
+
 tags:
+  - name: Documents
+    description: Document routes
+  - name: Extractions
+    description: Extraction routes
   - name: DevOps
     description: DevOps utility routes
   - name: Auth
@@ -25,6 +30,162 @@ tags:
     description: User routes
 
 paths:
+  /api/v1/upload:
+    post:
+      tags:
+        - Documents
+      summary: Upload a Document
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+                  description: PDF file to upload
+                groupID:
+                  type: string
+                  description: Optional group ID
+                name:
+                  type: string
+                  description: Optional document name
+      responses:
+        '200':
+          description: Document uploaded successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Document'
+        '422':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /api/v1/documents:
+    get:
+      tags:
+        - Documents
+      summary: Get all documents for user's group
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: List of documents
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Document'
+
+  /api/v1/documents/{documentID}:
+    get:
+      tags:
+        - Documents
+      summary: Get a specific document
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: documentID
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Document details
+          content:
+            application/pdf:
+              schema:
+                type: string
+                format: binary
+        '403':
+          description: Access forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    delete:
+      tags:
+        - Documents
+      summary: Delete a document
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: documentID
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Document deleted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    format: uuid
+        '403':
+          description: Access forbidden - Requires Admin role
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /api/v1/extractions/{documentID}:
+    get:
+      tags:
+        - Extractions
+      summary: Get document extractions
+      description: Retrieves the extracted information from a specific document
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: documentID
+          required: true
+          schema:
+            type: string
+          description: ID of the document to get extractions for
+      responses:
+        '200':
+          description: Successful extraction response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  documentID:
+                    type: string
+                  extractedAt:
+                    type: string
+                    format: date-time
+                  confidence:
+                    type: number
+                    format: float
+                    minimum: 0
+                    maximum: 1
+        '401':
+          description: Unauthorized - Invalid or missing authentication token
+        '403':
+          description: Forbidden - User doesn't have access to the document
+        '404':
+          description: Document not found
+
+
   ###############################################
   ## DevOps
   '/_healthcheck':
@@ -527,6 +688,41 @@ paths:
 
 components:
   securitySchemes:
-    BearerAuth:
+    bearerAuth:
       type: http
       scheme: bearer
+      bearerFormat: JWT
+  
+  schemas:
+    Error:
+      type: object
+      properties:
+        errors:
+          type: object
+          additionalProperties:
+            type: object
+            properties:
+              location:
+                type: string
+              param:
+                type: string
+              msg:
+                type: string
+
+    Document:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        groupID:
+          type: string
+        name:
+          type: string
+        filePath:
+          type: string
+        size:
+          type: number
+        mimeType:
+          type: string
+

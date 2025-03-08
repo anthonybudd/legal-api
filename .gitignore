@@ -11,7 +11,7 @@ sdk/dist
 todo.md
 bin/
 dist
-sdk/dist
+tmp/
 
 # Logs
 logs

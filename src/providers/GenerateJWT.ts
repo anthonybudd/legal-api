@@ -3,9 +3,13 @@ import { SignOptions, sign } from 'jsonwebtoken';
 import * as fs from 'fs';
 
 export default (user: UserModel, signOptions: SignOptions) => {
+
+    const u = user.toJSON() as any; // AB: not great.
+
     const payload = {
-        id: user.get('id'),
-        email: user.get('email'),
+        id: u.id,
+        email: u.email,
+        groupID: u.groups[0].id,
     };
 
     signOptions.algorithm = 'RS512';

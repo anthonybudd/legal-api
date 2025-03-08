@@ -1,14 +1,16 @@
 import { Model, InferAttributes, InferCreationAttributes, CreationOptional } from 'sequelize';
 import sequelize from '../providers/db';
 import * as Sequelize from 'sequelize';
-import { UpdatedAt } from 'sequelize-typescript';
 
 interface DocumentModel extends Model<InferAttributes<DocumentModel>, InferCreationAttributes<DocumentModel>> {
     id: CreationOptional<string>,
+    groupID: string,
     name: string,
+    filePath: string,
+    size: number,
+    mimeType: string,
     createdAt: CreationOptional<string>,
     updatedAt: CreationOptional<string>,
-    
 }
 
 const Document = sequelize.define<DocumentModel>('Document', {
@@ -19,9 +21,29 @@ const Document = sequelize.define<DocumentModel>('Document', {
         allowNull: false,
         unique: true,
     },
+    groupID: {
+        type: Sequelize.UUID,
+        allowNull: false,
+        references: {
+            model: 'Groups',
+            key: 'id'
+        }
+    },
 
 
     name: {
+        type: Sequelize.STRING,
+        allowNull: false,
+    },
+    filePath: {
+        type: Sequelize.STRING,
+        allowNull: false,
+    },
+    size: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+    },
+    mimeType: {
         type: Sequelize.STRING,
         allowNull: false,
     },
@@ -40,7 +62,7 @@ const Document = sequelize.define<DocumentModel>('Document', {
     defaultScope: {
         attributes: {
             exclude: [
-                // Excluded properties
+                'filePath',
             ]
         }
     },

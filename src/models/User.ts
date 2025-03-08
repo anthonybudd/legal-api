@@ -1,6 +1,7 @@
-import { Model, InferAttributes, InferCreationAttributes, CreationOptional } from 'sequelize';
+import { Model, InferAttributes, InferCreationAttributes, CreationOptional, } from 'sequelize';
 import sequelize from '../providers/db';
 import * as Sequelize from 'sequelize';
+import { GroupModel } from './Group';
 
 interface UserModel extends Model<InferAttributes<UserModel>, InferCreationAttributes<UserModel>> {
     id: CreationOptional<string>,
