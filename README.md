@@ -41,7 +41,7 @@ curl -X POST http://localhost:8888/api/v1/upload \
   -F "file=@example.pdf"
 ```
 
-Uploading a anything other than a PDF will result in 422 error
+Uploading anything other than a PDF will result in 422 error
 ```sh
 curl -X POST http://localhost:8888/api/v1/upload \
   -H "Authorization: Bearer $ACCESS_TOKEN" \
@@ -50,6 +50,7 @@ curl -X POST http://localhost:8888/api/v1/upload \
 
 ### SDK
 To build an SDK for the React Front-end just run the below command. By default this will make a JS, PHP and Swift SDK for this API.
+
 ```sh
 docker run --rm \
   -v ${PWD}:/app \
@@ -57,7 +58,10 @@ docker run --rm \
   openapitools/openapi-generator-cli batch sdk/config/*.yaml
 ```
 
+### Deployemnt
+This has been deployed to AWS using this [CloudFormation.yml](./aws/cloudformation.yml) file.
 
+Live URL [https://legal-api.anthonybudd.io/api/v1/_healthcheck](https://legal-api.anthonybudd.io/api/v1/_healthcheck)
 
 ### Routes
 [OpenApiSpec.yml](./OpenApiSpec.yml)
